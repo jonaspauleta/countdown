@@ -1,8 +1,18 @@
 <script setup>
 import VueCountdown from '@chenfengyuan/vue-countdown'
+import { ref, onMounted } from 'vue'
+import { supabase } from '../lib/supabaseClient'
 
-const targetDate = new Date('2023-08-19 10:00:00')
-const time = targetDate - (new Date())
+const time = ref(new Date())
+
+async function getDates() {
+  const { data } = await supabase.from('dates').select('date')
+  time.value = (new Date(data[0].date)) - (new Date())
+}
+
+onMounted(() => {
+  getDates()
+})
 </script>
 
 <template>
